@@ -1,9 +1,9 @@
 <template>
-    <div class="addNewOverlay fixed top-0 left-0 w-svw h-svh flex justify-center items-center">
+    <div class="addNewOverlay fixed top-0 left-0 w-svw h-svh flex justify-center items-center z-[999]">
         <section class="bg-white p-5 rounded-xl">
             <div class="flex flex-col gap-3">
-                <input class="w-full border border-[#d9d9d9] rounded-md p-3" type="text" id="newContactName" placeholder="name" v-model="newContactinfo.name">
-                <input class="w-full border border-[#d9d9d9] rounded-md p-3" type="mail" id="newContactemail" placeholder="e-mail" v-model="newContactinfo.email">
+                <input class="w-full border border-[#d9d9d9] rounded-md p-3" type="text" id="newContactName" placeholder="name" v-model="newContactinfo.name" @keyup.esc="store.editContact_ = !store.editContact_">
+                <input class="w-full border border-[#d9d9d9] rounded-md p-3" type="mail" id="newContactemail" placeholder="e-mail" v-model="newContactinfo.email" @keyup.enter="editContactSet()" @keyup.esc="store.editContact_ = !store.editContact_">
                 <div class="newButtons flex gap-3 justify-center">
                     <button class="cancelBUtton py-2 w-full min-w-20 hover:bg-[#f8f8f8] hover:shadow-md border border-[#d9d9d9] flex justify-center rounded-md" @click="store.editContact_ = !store.editContact_">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#770000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
@@ -31,8 +31,16 @@
         },
         methods:{
             editContactSet(){
-                this.store.editContactInfo(this.newContactinfo)
-            }
+                if(this.newContactinfo.name != ""){
+                    if (this.newContactinfo.email != ""){
+                        this.store.editContactInfo(this.newContactinfo)
+                    } else {
+                        alert('please enter an email')
+                    }
+                } else {
+                    alert('please enter a name')
+                }
+            },
         },
         setup(){
             const counterStore = useCounterStore();
