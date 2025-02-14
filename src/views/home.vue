@@ -7,7 +7,7 @@
         </button>
       </div>
       <div v-if="!viewList" class="w-full cardContainer gap-3 cardGridView grid items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        <!-- card -->
+        <!-- card Grid -->
         <div class="flex flex-col gap-3 border border-[#d9d9d9] rounded-xl h-full hover:shadow-md" v-for="(contact, index) in filteredContacts" :key="index">
           <div class="profilePicture">
             <img class="rounded-t-xl w-full aspect-video object-cover" src="https://buffer.com/library/content/images/size/w1200/2023/10/free-images.jpg" alt="">
@@ -17,8 +17,10 @@
             <span>email : {{ contact.email }} </span>
           </div>
         </div>
+        <!-- end card -->
       </div>
       <div  v-if="viewList" class="w-full cardContainer flex flex-col gap-3">
+        <!-- card List-->
         <div class="cardClassList flex justify-start md:items-center gap-10 border-b border-[#d9d9d9] p-1 hover:shadow-md" v-for="(contact, index) in filteredContacts" :key="index">
           <div class="profilePicture">
             <img class="rounded-xl object-cover w-20 aspect-square" src="https://buffer.com/library/content/images/size/w1200/2023/10/free-images.jpg" alt="">
@@ -27,9 +29,13 @@
             <span class="w-full md:w-1/2 lg:w-3/10">name : {{ contact.name.slice(0,25) }} <span v-if="contact.name.length > 25">...</span> </span>
             <span class="w-full md:w-1/2 lg:w-3/10">email : {{ contact.email }}</span>
           </div>
+          <button class="px-3 aspect-square hover:bg-[#eee] rounded-full me-5" @click="editContactInit(index)">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>
+          </button>
         </div>
-      </div>
         <!-- end card -->
+      </div>
+      <ed v-if="store.editContact_"/>
     </div>
 </template>
 
@@ -37,14 +43,18 @@
 import axios from 'axios';
 import { useCounterStore } from '../stores/store.js';
 import { computed } from 'vue';
+import editContactForm from '../components/editContact.vue'
 
 export default {
   data() {
     return {
       posts: [],
       errors: [],
-      viewList: false,
+      viewList: true,
     }
+  },
+  components:{
+    ed: editContactForm
   },
   setup(){
     const counterStore = useCounterStore();
@@ -65,7 +75,10 @@ export default {
     changeView(){
       this.viewList = !this.viewList;
       console.log(this.viewList)
-    }
+    },
+    editContactInit(index){
+      this.store.editContact(index);
+    },
   },
   computed:{
     filteredContacts: function(){
