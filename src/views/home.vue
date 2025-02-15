@@ -88,7 +88,7 @@ export default {
   mounted() {
     axios.get('https://jsonplaceholder.typicode.com/comments')
     .then(response => {
-      this.store.contacts = response.data.slice(0,10);
+      this.store.contacts = response.data;
       this.store.sortContacts(true);
     })
     .catch(e => {
@@ -97,8 +97,8 @@ export default {
   },
   watch:{
     orderBy(value){
-      // console.log(value == "true")
-      this.store.sortContacts(value === "true")
+      this.store.orderAccending = value === "true" 
+      this.store.sortContacts(this.store.orderAccending)
     }
   },
   methods:{
